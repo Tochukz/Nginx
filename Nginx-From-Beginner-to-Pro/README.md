@@ -56,3 +56,15 @@ __Modules (or Plug-Ins)__
 In Apache, you can dynamically load/unload the modules using configurations, but in Nginx you are supposed to build the binaries using different switches.
 
 ## Chapter 2: Installing Nginx  
+__Preparing Your Environment__  
+* Update the packages on your server  
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+```
+* Install some basic utilities: `lynx`, a text bases browser
+```
+$ sudo apt-get install lynx
+$ sudo apt-get install ssh
+```
+`nano` (a text editor) and `wget` (a text based downloader) are installed by default on Ubuntu.
