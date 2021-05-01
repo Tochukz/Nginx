@@ -67,4 +67,130 @@ $ sudo apt-get upgrade
 $ sudo apt-get install lynx
 $ sudo apt-get install ssh
 ```
-`nano` (a text editor) and `wget` (a text based downloader) are installed by default on Ubuntu.
+`nano` (a text editor) and `wget` (a text based downloader) are installed by default on Ubuntu.  
+
+#### Installing Nginx Using Pre-Built Packages  
+__Install Nginx Pre-Built Package__  
+Ubuntu PPA , has Nginx in their package repository list but it is not the latest version.  
+To ensure that you have the latest version installed on your server, you will need to add the Nginx repository in the `sources.list` file.  
+1. Open the `sources.list` file  
+```
+$ sudo nano /etc/apt/sources.list
+```  
+2. Append the Nginx repository to the button of the file and save
+```
+deb http://nginx.org/packages/ubuntu/ trusty nginx
+deb-src http://nginx.org/packages/ubuntu/ trusty nginx
+```  
+3. Download and add the Nginx public key  
+```
+$ wget http://nginx.org/keys/nginx_signing.key
+$ sudo apt-key add nginx_signing.key
+```
+4. Download and update the package lists from the repository  
+```
+$ sudo apt-get update
+```
+5. Install Nginx
+```
+$ sudo apt-get install nginx
+```
+6. Verify that Nginx was installed successfully  
+```
+$ nginx -v  
+```
+
+__Nginx Folder Structure__  
+To get the complete list of Nginx configuration details  
+```
+$ nginx -V
+```
+
+* Nginx is installed at `/etc/nginx` and the its configuration details is found in `/etc/nginx/nginx.conf`.  
+* The config file _include_ the `mime.types`. The `mime.types` and `fastcgi_params` file is found under `/etc/nginx`.  
+* The Nginx executable is located in the system executable directory `/usr/sbin/nginx`  
+* Nginx document root directory is located at `/usr/share/nginx/html` and contains `index.html` file
+* The default error and access log files are located at `/var/log/nginx` as `access.log` and `error.log`
+
+__Uninstall Nginx__  
+```
+$ sudo apt-get purge nginx nginx-common
+```  
+This will remove all the traces of Nginx installation. But it does not remove the Nginx entry from `sources.list`.  
+
+#### Downloading Nginx from Source   
+If you want to make configurations changes, and pull in or pull out some modules from Nginx, you will need to rebuild Nginx from source. This is the same technique required to install a customized build of Nginx or to configure Nginx with third party modules.   
+
+Visit the Nginx download webpage at [nginx.org/en/download.html](http://nginx.org/en/download.html), and download the `nginx-1.18.0.tar.gz` (at the time of this writing the latest version was `1.18.0`).    
+Alternately you can use the `wget` utility to download it.
+```
+$ wget http://nginx.org/download/nginx-1.18.0.tar.gz
+```  
+
+Extract the Nginx Archive
+```
+$ tar xzf nginx-1.18.0.tar.gz
+```  
+Checkout the content of the source directory  
+```
+$ ls -la nginx-1.18.0
+```  
+
+__Installing Nginx Binaries__   
+Compiling the source code required a `GCC` compiler and the `Make` utility to build and install the build.  
+Install the build tools:
+* Check the list of packages available in your Uuntu OS.  
+```
+$ sudo apt-cache search all | more
+```  
+* Install the development tool
+```
+$ sudo apt-get install build-essential
+```  
+* Update the system  
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+```
+* Verify the `GCC` and `Make` version
+```
+$ gcc --version
+$ make --version
+```
+
+__Install Dependent Packages__   
+Install __PCRE Library__ (Perl Compatible Regular Expression).  
+Ubuntu and CentOS already have PCRE-compiled version installed. But if not:
+```
+$ sudo apt-get install libprec3
+```  
+Install the development libraries for PCRE  
+```
+$ sudo apt-get install libpcre3-dev
+```  
+__OpenSSL__ is installed by default on most Linux distros:
+```
+$ openssl verson
+```  
+If it is missing, you can install it
+```
+$ sudo apt-get install openssl  
+```   
+To see the Open SSL details including it's directory :
+```
+$ openssl version -a
+```
+Install the development libraries:  
+```
+$ sudo apt-get install libssl-dev
+```
+__zlib Library__ is used by Nginx to gzip module for compression. _zlib_ is one of
+the dependencies of OpenSSL-devel so you shpuld already have it installed, but if not  
+```
+$ sudo apt-get install zlib1g zlib1g-dev
+```  
+Checkout the different configuration parameters available by using `configure` script  
+```
+$ cd nginx-1.18.0
+$  ./configure --help
+```
